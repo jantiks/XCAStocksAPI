@@ -50,6 +50,7 @@ public struct ChartData: Decodable {
         case close
         case low
         case open
+        case volume
     }
     
     public init(from decoder: Decoder) throws {
@@ -66,15 +67,17 @@ public struct ChartData: Decodable {
             let lows = try quoteContainer.decodeIfPresent([Double?].self, forKey: .low) ?? []
             let opens = try quoteContainer.decodeIfPresent([Double?].self, forKey: .open) ?? []
             let closes = try quoteContainer.decodeIfPresent([Double?].self, forKey: .close) ?? []
+            let volumes = try quoteContainer.decodeIfPresent([Double?].self, forKey: .volume) ?? []
             
             indicators = timestamps.enumerated().compactMap { (offset, timestamp) in
                 guard
                     let open = opens[offset],
                     let low = lows[offset],
                     let close = closes[offset],
-                    let high = highs[offset]
+                    let high = highs[offset],
+                    let volume = volumes[offset]
                 else { return nil}
-                return .init(timestamp: timestamp, open: open, high: high, low: low, close: close)
+                return .init(timestamp: timestamp, open: open, high: high, low: low, close: close, volume: volume)
             }
         } else {
             self.indicators = []
@@ -138,12 +141,14 @@ public struct Indicator: Decodable {
     public let high: Double
     public let low: Double
     public let close: Double
+    public let volume: Double
     
-    public init(timestamp: Date, open: Double, high: Double, low: Double, close: Double) {
+    public init(timestamp: Date, open: Double, high: Double, low: Double, close: Double, volume: Double) {
         self.timestamp = timestamp
         self.open = open
         self.high = high
         self.low = low
         self.close = close
+        self.volume = volume
     }
 }
