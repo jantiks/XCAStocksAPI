@@ -40,7 +40,7 @@ public struct XCAStocksAPI: IStocksAPI {
     }
     
     private func urlForChartData(symbol: String, range: ChartRange) -> URL? {
-        guard var urlComp = URLComponents(string: "\(baseURL)/v8/finance/chart/\(symbol)") else {
+        guard var urlComp = URLComponents(string: "\(baseURL)/v6/finance/chart/\(symbol)") else {
             return nil
         }
         
@@ -100,7 +100,7 @@ public struct XCAStocksAPI: IStocksAPI {
     }
     
     private func urlForFetchQuotes(symbols: String) -> URL? {
-        guard var urlComp = URLComponents(string: "\(baseURL)/v7/finance/quote") else {
+        guard var urlComp = URLComponents(string: "\(baseURL)/v6/finance/quote") else {
             return nil
         }
         urlComp.queryItems = [ URLQueryItem(name: "symbols", value: symbols) ]
